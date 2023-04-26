@@ -7,7 +7,7 @@ const initialState = {
     description:''
 }
 
-function FormTask({tasks, addTask}) {
+function FormTask({addTask}) {
     const [infoForm, setInfoForm] = useState(initialState);
     const [errors, setError] = useState([]);
 
@@ -90,14 +90,10 @@ const Error = ({errorMessage}) => {
 }
 
 // Redux
-const mapStateToProps = (state) => ({
-    tasks: state.tasks
-});
-
 const mapDispatchToProps = (dispatch) => ({
     addTask: (payload = {name:'eso es'}) => {
         dispatch(addTask(payload));
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormTask);
+export default connect(null, mapDispatchToProps)(FormTask);

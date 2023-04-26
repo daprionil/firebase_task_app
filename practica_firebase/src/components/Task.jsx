@@ -1,13 +1,29 @@
 import { useEffect, useState } from "react";
+import { updateTaskUtils } from "../utils/taskUtils";
 
 function Task({id, asunto, description, complete}) {
-    const [completeTask, setCompleteTask] = useState(complete)
+    const [completeTask, setCompleteTask] = useState(complete);
 
-    const handleComplete = () => setCompleteTask(state => !state);
+    const handleComplete = () => {
+        setCompleteTask(state =>  !state);
+    };
+
+    useEffect(() => {
+        //Update Task in Firebase Firestore
+
+        updateTaskUtils({
+            document:{
+                id
+            },
+            payload:{
+                complete:completeTask
+            }
+        });
+    },[completeTask]);
 
     return (
         <div className="grid grid-cols-12">
-            <div className="col-span-9 overflow-hidden rounded-md bg-slate-100">
+            <div className="col-span-9 shadow-md overflow-hidden rounded-md bg-slate-100">
                 <div className={`p-2 ${ completeTask ? 'bg-green-400' : 'bg-red-600' }`}>
                     <p className="truncate">
                         <strong className="">Asunto: </strong>
