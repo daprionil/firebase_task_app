@@ -1,16 +1,16 @@
+import { UPDATE_TASKS } from "./actionTypes";
+
 const initialState = {
-    tasks:[
-        {
-            id: 210310,
-            asunto: 'Severo ñero',
-            description: 'lorem ipsum dolor itsem emet',
-            completed: false
-        }
-    ]
+    tasks:[]
 }
 
 const rootReducer = (state = initialState, {type, payload}) => {
-    console.log({type,payload});
-    return state
+    const typeAction = ({
+        [UPDATE_TASKS]: () => {
+            return {...state, tasks: payload}
+        }
+    })[type];
+
+    return typeAction ? typeAction() : state
 };
 export default rootReducer;

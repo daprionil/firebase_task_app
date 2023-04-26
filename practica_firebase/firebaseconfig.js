@@ -1,18 +1,20 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBfTJbuEpm8QfpkOYqb5RGLYRRJp_mFfkM",
-  authDomain: "tasks-practice-pi.firebaseapp.com",
-  projectId: "tasks-practice-pi",
-  storageBucket: "tasks-practice-pi.appspot.com",
-  messagingSenderId: "51447486781",
-  appId: "1:51447486781:web:b7b87345a7099d69058d54"
+  apiKey:  import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID
 };
 
 // Initialize Firebase
-const db = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export default db;

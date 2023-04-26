@@ -1,7 +1,7 @@
-const ADD_TASK = "ADD_TASK",
+const UPDATE_TASKS = "UPDATE_TASKS",
       GET_TASKS = "GET_TASKS";
 
 export {
-    ADD_TASK,
+    UPDATE_TASKS,
     GET_TASKS
 }

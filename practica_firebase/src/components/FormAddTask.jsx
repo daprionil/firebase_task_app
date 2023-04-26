@@ -1,32 +1,60 @@
 import { useState } from "react";
 import { connect } from "react-redux";
+import { addTask } from "../redux/actionCreators";
 
 const initialState = {
     asunto:'',
     description:''
 }
 
-function FormTask({tasks}) {
+function FormTask({tasks, addTask}) {
     const [infoForm, setInfoForm] = useState(initialState);
+    const [errors, setError] = useState([]);
 
     const handleChange = ({target}) => {
         setInfoForm(state => ({...state,[target.name]: target.value}))
     };
 
+    const getErrors = dataValidate => {
+        return dataValidate.map( ([key]) => {
+            return `El campo de ${key} no es válido`;
+        })
+    };
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        console.log(tasks);        
+        
+        const objValidate = {
+            asunto: ({length}) => length > 0 && length < 50,
+        }
+        
+        //Validate form info
+        const validateForm = Object.entries(infoForm).filter(([key,val]) => {
+            const verify = objValidate[key];
+            
+            if(verify)return !verify(val);
+            return !(val.length > 0 && val.length < 200);
+        });
+        
+        
+        //Actualizar Errores
+        setError(getErrors(validateForm));
+        
+        //Si pasa la validación envía la Action para agregar el documento la tarea
+        if(!validateForm.length){
+            setInfoForm(initialState);
+            return addTask(infoForm);
+        }
     };
 
     return (
-        <form action="" onSubmit={handleSubmit} className="grid gap-1">
-            <h1 className="text-center font-bold text-xl p-3 w-fit mx-auto mb-2 bg-opacity-80  drop-shadow-md bg-slate-100 rounded-full">Agrega tus Notas</h1>
+        <form action="" onSubmit={handleSubmit} className="grid gap-1 py-4">
+            <h1 className="p-3 mx-auto mb-2 text-xl font-bold text-center text-white bg-blue-700 rounded-full w-fit bg-opacity-90 drop-shadow-md">Agrega tus Notas</h1>
             <input
                 type="text"
                 name="asunto"
                 placeholder="Asunto"
-                className="p-3 rounded-md bg-slate-50 bg-opacity-90 placeholder:text-slate-500 border-none outline-none input-hover-placeholder"
+                className="p-3 border-none rounded-md shadow outline-none bg-slate-50 bg-opacity-90 placeholder:text-slate-500 input-hover-placeholder"
                 value={infoForm.asunto}
                 onChange={handleChange}
             />
@@ -34,14 +62,19 @@ function FormTask({tasks}) {
                 name="description"
                 cols="30"
                 rows="10"
-                className=" resize-none rounded-md p-3 border-none outline-none bg-opacity-80 bg-slate-100 placeholder:text-slate-500 input-hover-placeholder"
+                className="p-3 border-none rounded-md shadow outline-none resize-none bg-opacity-80 bg-slate-100 placeholder:text-slate-500 input-hover-placeholder"
                 placeholder="Descripción"
                 onChange={handleChange}
-                defaultValue={infoForm.description}
+                value={infoForm.description}
             ></textarea>
+            <div className="pb-2 mt-2">
+                {
+                    errors && errors.map( (err,i) => <Error key={i} errorMessage={err} />)
+                }
+            </div>
             <button
                 type="submit"
-                className=" btn font-bold bg-blue-600 text-white"
+                className="text-xl focus:outline outline-none border-none font-bold text-white bg-blue-600 btn hover:shadow-[0_2px_0_0_black,2px_-2px_0_0_blue]"
             >
                 Agregar
             </button>
@@ -49,8 +82,22 @@ function FormTask({tasks}) {
     );
 }
 
+//Components
+const Error = ({errorMessage}) => {
+    return (
+        <p className="px-4 py-2 mx-auto mt-1 text-center text-white bg-red-800 rounded-md w-fit">{errorMessage}</p>
+    );
+}
+
+// Redux
 const mapStateToProps = (state) => ({
     tasks: state.tasks
 });
 
-export default connect(mapStateToProps, null)(FormTask);
+const mapDispatchToProps = (dispatch) => ({
+    addTask: (payload = {name:'eso es'}) => {
+        dispatch(addTask(payload));
+    }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormTask);
