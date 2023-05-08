@@ -17,7 +17,7 @@
     @apply placeholder:transition-all placeholder:duration-300 focus:placeholder:text-lg;
   }
   .btn{
-    @apply px-4 py-2  rounded shadow-md hover:shadow-[0_2px_0px_0px_rgba(255,255,255,1)] w-fit mx-auto transition-all duration-300 ease-in ;
+    @apply px-4 py-2 outline-none border-none rounded shadow-md hover:shadow-[0_2px_0px_0px_rgba(255,255,255,1)] w-fit mx-auto transition-all duration-300 ease-in ;
   }
   .text-shadow{
     @apply [text-shadow:_-1px_-2px_1px_rgb(0_0_0_/_60%)]

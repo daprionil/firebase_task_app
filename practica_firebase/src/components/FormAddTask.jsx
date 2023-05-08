@@ -74,7 +74,7 @@ function FormTask({addTask}) {
             </div>
             <button
                 type="submit"
-                className="text-xl focus:outline outline-none border-none font-bold text-white bg-blue-600 btn hover:shadow-[0_2px_0_0_black,2px_-2px_0_0_blue]"
+                className="text-xl focus:outline font-bold text-white bg-blue-600 btn hover:shadow-[0_2px_0_0_black,2px_-2px_0_0_blue]"
             >
                 Agregar
             </button>
