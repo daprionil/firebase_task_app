@@ -42,8 +42,8 @@ function FormTask({addTask}) {
         
         //Si pasa la validación envía la Action para agregar el documento la tarea
         if(!validateForm.length){
-            setInfoForm(initialState);
-            return addTask(infoForm);
+            addTask(infoForm);
+            return setInfoForm(initialState);
         }
     };
 

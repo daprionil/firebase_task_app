@@ -1,4 +1,4 @@
-import { UPDATE_TASKS } from "./actionTypes";
+import { UPDATE_TASKS,CHANGE_LOADING } from "./actionTypes";
 
 import { addDoc, collection, getDocs, query, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import db from '../../firebaseconfig';
@@ -6,6 +6,8 @@ import db from '../../firebaseconfig';
 //! modelo de uso redux thunk
 const getTasks = () => {
     return function(dispatch){
+        dispatch({type:CHANGE_LOADING, payload: true});
+
         const refCollection = collection(db, 'tasks')
         const q = query(refCollection);
         getDocs(q)
@@ -22,6 +24,7 @@ const getTasks = () => {
                 type: UPDATE_TASKS,
                 payload: tasks
             });
+            dispatch({type:CHANGE_LOADING, payload: false});
         });
     }
 };
@@ -30,6 +33,7 @@ const getTasks = () => {
 //? Agrega una nueva tarea
 const addTask = (payload) => {
     return function(dispatch){
+        dispatch({type:CHANGE_LOADING, payload: true});
         const refCollection = collection(db, 'tasks');
         addDoc(refCollection, {...payload, complete:false})
             .then(() => {
@@ -49,12 +53,14 @@ const addTask = (payload) => {
                     type: UPDATE_TASKS,
                     payload: tasks
                 });
+                dispatch({type:CHANGE_LOADING, payload: false});
             });
     };
 };
 
 const deleteTask = id => {
     return async function(dispatch){
+        dispatch({type:CHANGE_LOADING, payload: true});
         const refDoc = doc(db, 'tasks', id);
         await deleteDoc(refDoc);
         
@@ -73,7 +79,8 @@ const deleteTask = id => {
         dispatch({
             type:UPDATE_TASKS,
             payload: docsBeforeDelete
-        })
+        });
+        dispatch({type:CHANGE_LOADING, payload: false});
     };
 };
 
